@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Site Search</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .search-container {
+        text-align: center;
+      }
+
+      .search-input {
+        padding: 8px;
+        font-size: 16px;
+        width: 300px;
+      }
+
+      .search-button {
+        margin-top: 8px;
+        padding: 8px 16px;
+        font-size: 16px;
+      }
+
+      .search-results {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search..." />
+      <button id="searchButton" class="search-button">Search</button>
+    </div>
+    <ul id="searchResults" class="search-results"></ul>
+
+    <script>
+      // JavaScript code goes here
+
+      const a = {
+        mobiles: {
+          Samsung: {
+            SamsungA10: {
+              name: "Samsung A10",
+              ram: "4gb",
+              rom: "64gb",
+              camera: "13",
+              price: "22,000 PKR",
+            },
+            SamsungA20: {
+              name: "Samsung A20",
+              ram: "4gb",
+              rom: "64gb",
+              camera: "18",
+              price: "28,000 PKR",
+            },
+            SamsungA30: {
+              name: "Samsung A30",
+              ram: "4gb",
+              rom: "64gb",
+              camera: "25",
+              price: "29,000 PKR",
+            },
+          },
+          Xiomi:{},
+          Apple:{},
+          Oppo:{}
+
+        },
+      };
+
+      const searchInput = document.getElementById("searchInput");
+      const searchButton = document.getElementById("searchButton");
+      const searchResults = document.getElementById("searchResults");
+
+      function flattenObject(obj, prefix = "", keys = []) {
+        for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            const value = obj[key];
+            const newKey = prefix ? `${prefix}.${key}` : key;
+
+            if (typeof value === "object") {
+              flattenObject(value, newKey, keys);
+            } else {
+              keys.push(newKey);
+            }
+          }
+        }
+        return keys;
+      }
+
+      function renderSearchResults(results) {
+        const fragment = document.createDocumentFragment();
+
+        results.forEach((key) => {
+          const li = document.createElement("li");
+          li.textContent = key;
+          fragment.appendChild(li);
+        });
+
+        searchResults.innerHTML = "";
+        searchResults.appendChild(fragment);
+      }
+
+      function performSearch() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const flattenedKeys = flattenObject(a);
+
+        const filteredKeys = flattenedKeys.filter((key) => {
+          return key.toLowerCase().includes(searchTerm);
+        });
+
+        renderSearchResults(filteredKeys);
+      }
+
+      searchButton.addEventListener("click", performSearch);
+      searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") { performSearch();  }
+      });
+    </script>
+  </body>
+</html>
